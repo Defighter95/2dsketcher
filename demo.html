@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<table class="table table-striped">
+ <thead>
+ <tr>
+ <th>Имя</th>
+ <th>Фамилия</th>
+ <th>Почта</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>Иван</td>
+ <td>Николайчук</td>
+ <td>ivan@example.com</td>
+ </tr>
+ <tr>
+ <td>Мария</td>
+ <td>Иванова</td>
+ <td>mary@example.com</td>
+ </tr>
+ <tr>
+ <td>Юлия</td>
+ <td>Петренко</td>
+ <td>julia@example.com</td>
+ </tr>
+ </tbody>
+ </table>
+<button type="button" class="btn btn-default">Стандартна</button>
+<button type="button" class="btn btn-primary">Основна</button>
+<button type="button" class="btn btn-success">Підтвердити</button>
+<button type="button" class="btn btn-info">Повідомлення</button>
+<button type="button" class="btn btn-warning">Увага</button>
+<button type="button" class="btn btn-danger">Відміна</button>
+<button type="button" class="btn btn-link">Посилання</button>
+
+<button type="button" class="btn btn-primary btn-lg">Велика</button>
+<button type="button" class="btn btn-primary btn-md">Середня</button>
+<button type="button" class="btn btn-primary btn-sm">Маленька</button>
+<button type="button" class="btn btn-primary btn-xs">Ще менша</button>
+
+<button type="button" class="btn btn-primary btn-lg btn-block">Блочна кнопка</button>
+<button type="button" class="btn btn-default btn-lg btn-block">Блочна кнопка</button>
+
+<div class="row"> 
+  <div class="col-sm-5 col-md-6">.col-sm-5 .col-md-6</div> 
+  <div class="col-sm-5 col-sm-offset-2 col-md-6 col-md-offset-0"> .col-sm-5 .col-sm-offset-2 .col-md-6 .col-md-offset-0</div> 
+</div>
+
+<div class="row"> 
+  <div class="col-sm-4 col-sm-push-8" style="background-color:red">.col-sm-4 .col-sm-push-8</div> 
+  <div class="col-sm-8 col-sm-pull-4" style="background-color:green">.col-sm-8 .col-sm-pull-4</div> 
+</div>
+
+<div class="row">
+  <div class="col-sm-8" style="background-color:red"> 
+   .col-sm-8 
+   <div class="row"> 
+    <div class="col-sm-6" style="background-color:black">.col-sm-6</div> 
+    <div class="col-sm-6" style="background-color:yellow">.col-sm-6</div> 
+   </div> 
+ </div> 
+ <div class="col-sm-4" style="background-color:green">.col-sm-4</div> 
+</div>
+
+<div class="row">
+  <div class="col-sm-12 col-md-8 col-lg-6" style="background-color:red">.col-sm-6</div> 
+  <div class="col-sm-12 col-md-4 col-lg-6" style="background-color:green">.col-sm-6</div> 
+</div>
+
+<form class="form-horizontal">
+ <div class="form-group">
+  <label for="mail" class="col-sm-2 control-label">Email</label>
+  <div class="col-sm-10">
+   <input type="email" class="form-control" id="mail" placeholder="Email">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="pass" class="col-sm-2 control-label">Пароль</label>
+  <div class="col-sm-10">
+   <input type="password" class="form-control" id="pass" placeholder="Пароль">
+  </div>
+ </div>
+ <div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+   <div class="checkbox">
+    <label>
+     <input type="checkbox"> Запомнить меня
+    </label>
+   </div>
+  </div>
+ </div>
+ <div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+   <button type="submit" class="btn btn-success">Подтвердить</button>
+  </div>
+ </div>
+</form>
+
+<button class="btn btn-success">
+<i class="glyphicon glyphicon-eye-close"></i> Скрыть плохие новости
+</button>
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active">Home</li>
+</ol>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="#">Home</a></li>
+  <li class="breadcrumb-item active">Library</li>
+</ol>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="#">Home</a></li>
+  <li class="breadcrumb-item"><a href="#">Library</a></li>
+  <li class="breadcrumb-item active">Data</li>
+</ol>
+
+<h1>Example heading <span class="badge badge-default">New</span></h1>
+<h2>Example heading <span class="badge badge-success">New</span></h2>
+<h3>Example heading <span class="badge badge-primary">New</span></h3>
+<h4>Example heading <span class="badge badge-info">New</span></h4>
+<h5>Example heading <span class="badge badge-warning">New</span></h5>
+<h6>Example heading <span class="badge badge-danger">New</span></h6>
+
+<span class="badge badge-default">Default</span>
+<span class="badge badge-primary">Primary</span>
+<span class="badge badge-success">Success</span>
+<span class="badge badge-info">Info</span>
+<span class="badge badge-warning">Warning</span>
+<span class="badge badge-danger">Danger</span>
+
+<span class="badge badge-pill badge-default">Default</span>
+<span class="badge badge-pill badge-primary">Primary</span>
+<span class="badge badge-pill badge-success">Success</span>
+<span class="badge badge-pill badge-info">Info</span>
+<span class="badge badge-pill badge-warning">Warning</span>
+<span class="badge badge-pill badge-danger">Danger</span>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div id="id" class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg height="400" width="450">
+   <path d="M10 10 C 20 20, 40 20, 50 10" stroke="black" fill="transparent"/>
+  <path d="M70 10 C 70 20, 120 20, 120 10" stroke="black" fill="transparent"/>
+  <path d="M130 10 C 120 20, 180 20, 170 10" stroke="black" fill="transparent"/>
+  <path d="M10 60 C 20 80, 40 80, 50 60" stroke="black" fill="transparent"/>
+  <path d="M70 60 C 70 80, 110 80, 110 60" stroke="black" fill="transparent"/>
+  <path d="M130 60 C 120 80, 180 80, 170 60" stroke="black" fill="transparent"/>
+  <path d="M10 110 C 20 140, 40 140, 50 110" stroke="black" fill="transparent"/>
+  <path d="M70 110 C 70 140, 110 140, 110 110" stroke="black" fill="transparent"/>
+  <path d="M130 110 C 120 140, 180 140, 170 110" stroke="black" fill="transparent"/>
+</svg>
+
+<script>
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+});
+
+$(document).on('keyup keydown', function(e){shifted = e.shiftKey; 
+console.log(shifted);
+console.log(e);
+
+} );
+var mousePosition = {x:0, y:0};
+$(document).bind('mousemove',function(mouseMoveEvent){
+mousePosition.x = mouseMoveEvent.pageX;
+mousePosition.y = mouseMoveEvent.pageY;
+console.log(mousePosition.x);
+console.log(mousePosition.y);
+console.log($('#id').offset());
+
+});
+</script>
+
+</body>
+</html>

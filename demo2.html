@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<svg id="swg" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <path d="M569 401 Q 764 287 344 348 " stroke="black" fill="transparent"/>
+</svg>
+
+<div>lkhkjhjkhjkh</div>
+
+<script>
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+});
+
+var step = 0;
+var from = {x:0, y:0};
+var to = {x:0, y:0};
+var radius = {x:0, y:0};
+var mousePosition = {x:0, y:0};
+
+$(document).mousedown(function(e) {
+console.log(mousePosition.x);
+console.log(mousePosition.y);
+  shifted = e.shiftKey;
+if(shifted) {
+   step++;
+}
+switch(step){
+case 1: 
+from.x = mousePosition.x;
+from.y = mousePosition.y;
+console.log('here');
+break;
+case 2: 
+to.x = mousePosition.x;
+to.y = mousePosition.y;
+console.log('here');
+break;
+case 3: 
+radius.x = mousePosition.x;
+radius.y = mousePosition.y;
+console.log($("svg"));
+  $("svg").html('<path d="M'+from.x+' '+from.y+' Q '+radius.x+' '+radius.y+' '+to.x+' '+to.y+'" stroke="black" fill="transparent"/>');
+$("div").html('<path d="M 401 Q 764 287 344 348" stroke="black" fill="transparent"/>');
+console.log('here');
+break;
+default: 
+step = 0;
+}
+console.log(step);
+console.log(from);
+console.log(to);
+console.log(radius);
+
+});
+
+$(document).bind('mousemove',function(mouseMoveEvent){
+mousePosition.x = mouseMoveEvent.pageX;
+mousePosition.y = mouseMoveEvent.pageY;
+//console.log(mousePosition.x);
+//console.log(mousePosition.y);
+//console.log($('#id').offset());
+
+});
+</script>
+
+</body>
+</html>

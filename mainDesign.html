@@ -1,0 +1,438 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="js/jquery.svg.css">
+
+        <script src="js/jquery-3.3.1.js"></script>
+        <script src="js/jquery.svg.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+
+        <script src="js/classes/sketch.js"></script>
+        
+        <script src="js/baseClasses.js"></script>
+
+        <script src="js/elements/quadraticBizier.js"></script>
+        <script src="js/elements/cubicBizier.js"></script>
+        <script src="js/elements/polyLine.js"></script>
+        <script src="js/elements/circle.js"></script>
+        <script src="js/elements/rectangle.js"></script>
+        <script src="js/elements/ellipse.js"></script>
+
+        <script src="js/modalWindows.js"></script>
+
+
+        <style>
+            .svg-element {
+                cursor:move;
+            }
+
+            [data-role="curve-point"] {
+                cursor:crosshair;
+            }
+
+            input[type="checkbox"] {
+                margin-left: 0px;
+                margin-top: 15px;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-md-12" style="/* margin-top: 40px; */">
+                    <ul class="nav nav-pills main-menu-buttons" style="    /* padding: 10px;  border: 3px solid; */border-color: #a0a0a0; border-radius: 5px 5px 0px 0px;">
+
+                        <li class="nav-item">
+                            <a class="btn btn-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">File</a>
+                            <div class="dropdown-menu dropright">
+                                <a class="dropdown-item" href="#"><span class="oi oi-book"></span> Import from DB</a>
+                                <a class="dropdown-item" href="#" data-action="load-file"><span class="oi oi-folder"></span> Import from file </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-action="db-export"><span class="oi oi-share-boxed"></span> Export to DB </a>
+                                <a class="dropdown-item" href="#"><span class="oi oi-file"></span> Export to DB and Save to file </a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                            <div class="dropdown-menu dropright">
+
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Action</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+
+                                <a class="dropdown-item" href="#"><span class="oi oi-action-undo"></span> Undo</a>
+                                <a class="dropdown-item" href="#"><span class="oi oi-action-redo"></span> Redo</a>
+                                <a class="dropdown-item" href="#" data-action="canva-params"><span class="oi oi-grid-two-up"></span> Canvas' properties</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><span class="oi oi-loop-circular"></span> Clear</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mode</a>
+                            <div class="dropdown-menu dropright">
+                                <a class="dropdown-item" href="#"><span class="oi oi-terminal"></span> Hardware properties</a>
+                                <a class="dropdown-item" href="#" data-action="sketh-props"><span class="oi oi-map"></span> Sketch properties</a>
+                                <a class="dropdown-item" href="#"><span class="oi oi-info"></span> Sketch total Info</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><span class="oi oi-fire"></span> Generate G-codes</a>
+                                <a class="dropdown-item" href="#"><span class="oi oi-play-circle"></span> Simulate</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Other</a>
+                            <div class="dropdown-menu dropright">             
+                                <a class="dropdown-item" href="#" data-action="usefull-links"><span class="oi oi-external-link"></span> Links</a>
+                                <a class="dropdown-item" href="#"><span class="oi oi-question-mark"></span> FAQ</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-link" id="about-modal-button" href="#" data-action="about-window">About</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+                <div class="col-md-3 active-element-form-container" style="">
+                    <form id="active-element-form">
+                        <!--  <div class="form-group row">
+                              <label for="inputEmail3" class="col-sm-3 col-form-label">Email <span style="color:red; cursor:pointer" class="oi oi-circle-x"></span></label>
+
+                              <div class="col">
+                                  <input type="text" class="form-control" placeholder="First name">
+                              </div>
+                              <div class="col">
+                                  <input type="text" class="form-control" placeholder="Last name">
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="inputPassword3" class="col-sm-2 col-form-label">Password </span></label>
+                              <div class="col-sm-10">
+                                  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                              </div>
+                          </div>
+                          <fieldset class="form-group">
+                              <div class="row">
+                                  <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                                  <div class="col-sm-10">
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                          <label class="form-check-label" for="gridRadios1">
+                                              First radio
+                                          </label>
+                                      </div>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                          <label class="form-check-label" for="gridRadios2">
+                                              Second radio
+                                          </label>
+                                      </div>
+                                      <div class="form-check disabled">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+                                          <label class="form-check-label" for="gridRadios3">
+                                              Third disabled radio
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <div class="form-group row">
+                              <div class="col-sm-2">Checkbox</div>
+                              <div class="col-sm-10">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                      <label class="form-check-label" for="gridCheck1">
+                                          Example checkbox
+                                      </label>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-sm-10">
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-check"></span> Save</button>
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-chevron-left"></span> Restore</button>
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-fork"></span> Copy</button>
+                              </div> 
+                          </div> -->
+                    </form>                
+                </div>
+                <!-- <div class="w-100"></div> -->
+                <div class="col-md-9" style="margin-top: 0px;">
+                    <div class="btn-toolbar float-left" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "pLine" title="Poly Line"><span class="oi oi-pulse"></span></button>
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "circle" title="Circle"><span class="oi oi-media-record"></span></button>                      
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "ellipse" title="Ellipse"><span class="oi oi-media-record"></span> <span class="oi oi-resize-both"></span></button>                   
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "rectangle" title="Rectangle"><span class="oi oi-media-stop"></span></button>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "qBizier" title="Quadratic Bizier"><span class="oi oi-crop"></span></button>
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "cBizier" title="Cubic Bizier"><span class="oi oi-link-broken"></span></button>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-secondary" title="Undo"><span class="oi oi-action-undo"></span></button>
+                            <button type="button" class="btn btn-secondary" title="Redo"><span class="oi oi-action-redo"></span></button>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="dropleft">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="oi oi-spreadsheet"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                                <div id="element-list" style="padding-left: 20px; padding-right: 30px; padding-top: 5px; padding-bottom: 5px; border-radius: 0px 0px 5px 5px; border-color:#a0a0a0; max-height: 400px;     overflow-x: hidden;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="demo-div" style="clear:both; padding:10px; border: 3px solid; border-radius: 6px; border-color: #a0a0a0; border-radius: 0px 0px 5px 5px;">	
+                        <div class="btn-group mr-2" style="position: absolute;" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-light svg-control-button" title="Zoom In" data-action="zoom-in"><span class="oi oi-zoom-in"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="Zoom Out" data-action="zoom-out"><span class="oi oi-zoom-out"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="To Zero Position" data-action="to-zero"><span class="oi oi-map-marker"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="Canva's properties" data-action="params"><span class="oi oi-wrench"></span></button>                 
+                        </div>
+
+                        <svg onmousedown="return false"  id="svg" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <path class="active-element" id="demo-path" d="M10 80 Q 60 10, 95 80 T 280 80 T 180 180 T 215 300" stroke="black" fill="transparent"/> -->
+
+                        <!-- <polyline id="demo-poly" fill="none" stroke="black" stroke-dasharray="6, 3" points="10,80 60,10 95,80"/> -->
+                        </svg>
+                    </div>
+
+                </div>
+                <div class="col-md-9 offset-md-3" style="">
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+
+
+
+                <div class="col-md-2" style="">
+                    <!-- <div id="element-list" style="padding: 10px; border: 3px solid; border-radius: 0px 0px 5px 5px; border-color: #a0a0a0;">
+                          <div class="row element-list-item">
+                             <span class="col" data-id="1111" style="cursor:pointer">QuadraticBizier2143</span>
+                         </div>
+                         <div class="row">
+                             <span class="col" style="cursor:pointer">QuadraticBizier2172</span>
+                         </div>
+                         <div class="row">
+                             <span class="col font-weight-bold" style="cursor:pointer">QuadraticBizier2173</span>
+                         </div> 
+                     </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...		
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="jqSvg" style="display:none"></div>
+
+        <!-- About Modal Content -->
+        <div id="about-modal-body" style="display:none">
+            <p>
+                <strong>
+                    2D Sketcher 2018 ver. 0.3<br />
+                    Author: Ilya Kobus <br />
+                </strong>
+            </p>		
+            Used technologies and frameworks: <br />
+            <ul>
+                <li><a href="https://jquery.com/" target="_blank">JQuery 3.3.1</a></li>
+                <li><a href="http://keith-wood.name/svg.html" target="_blank">JQuery SVG plugin</a></li>
+                <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap v4.1.0</a></li>
+                <li><a href="https://useiconic.com/open/" target="_blank">Useiconic</a></li> 
+            </ul>		
+            <p class="text-right">
+                <span style="font-size: 0.9rem;">
+                    <strong>Contacts:</strong><br />
+                    <strong>Email: </strong><a href="mailto:illia.kobus@nure.ua">illia.kobus@nure.ua</a><br />
+                    <strong>Skype: </strong><a href="skype:defighter95">defighter95</a><br />
+                </span>
+            </p>
+            <p  class="text-right" style="font-size: 0.8rem;">
+                You do not have the permission to use<br /> or rewrite the source code without<br /> the written consent of the author.
+            </p>
+        </div>
+        <!-- End of About Modal Content -->
+
+        <!-- Component Details Modal Content -->
+        <div id="detail-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <strong>Total Length</strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-length">128.1</span> mm
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Square of base for detail</strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-square">22.1</span> mm<sup>2</sup>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Base commands count</strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-commands-count">21</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Estimated lead time</strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-time">60</span> s
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Cost</strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-cost">22.10</span>                      
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- End of Component Details Modal Content -->
+
+        <!-- Canvas Params Modal -->
+        <div id="canvas-params-modal-body" style="display:none">	
+            <form id="canvas-params-form">
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-sm-6 col-form-label">Grid cell Size (mm)</label>
+                    <div class="col">
+                        <input type="text" id="canvas-params-cell-size" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div class="row">                   
+                    <label for="inputEmail3" class="col-sm-6 col-form-label">SubGrid elements count</label>
+                    <div class="col">
+                        <input type="text" id="canvas-params-subcell-count" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- End of Canvas Params Modal -->
+
+        <!-- Save to DB Modal -->
+        <div id="db-save-body" style="display:none">	
+            Saving to DB...
+        </div>
+        <!-- End of Save to DB Modal -->
+
+        <!-- Load from File Modal -->
+        <div id="load-file-body" style="display:none">	
+            <form id="load-file-form">
+                <div class="form-group">
+                    <label for="2ds-load">Choose your 2D Sketch File (.2ds)</label>
+                    <input type="file" accept=".2ds" class="form-control-file" id="2ds-load">
+                </div>
+            </form>
+        </div>
+        <!-- End of Load from File Modal -->
+        
+        <!-- Sketch Properties Modal -->
+        <div id="sketch-properties-modal-body" style="display:none">	
+            <form id="sketch-properties-form">
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-4 col-form-label">Grid cell Size (mm)</label>
+                    <div class="col-md-3">
+                        <input type="range" min = "0.05" max ="0.5" step ="0.05" id="sketch-properties-form-inter" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <span id="sketch-properties-form-inter-value"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <svg onmousedown="return false" id="sketch-step-demo" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- End of Sketch Properties Modal -->
+        
+                <!-- Links Modal -->
+        <div id="links-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <strong>SVG Documentation</strong>
+                    </td>
+                    <td>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/SVG" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Фрезерные ЧПУ станки от MTech</strong>
+                    </td>
+                    <td>
+                        <a href="https://mtech.com.ua/product-category/frezernye-stanki/ " target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Создание управляющих программ</strong>
+                    </td>
+                    <td>                      
+                       <a href="https://vseochpu.ru/upravlyayushhaya-programma-dlya-stankov-s-chpu/" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Работа в САПР SolidWorks</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.youtube.com/watch?v=sYZL3vZpmRA" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>G-код - примеры управляющих программ</strong>
+                    </td>
+                    <td>
+                        <a href=" http://www.intuwiz.ru/articles/examples-of-g-code.html#.WxHny-6FOUk" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>         
+            </table>
+        </div>
+        <!-- End of Links Modal -->
+
+    </body>
+</html>

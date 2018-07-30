@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/classes/sketch.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/modalWindows.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/cubicBizier.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/polyLine.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/core/translater.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/mainPage.phtml</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/classes/hardware.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/saveToDb.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/GProgramm.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/index.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/baseClasses.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/createGCodes.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/quadraticBizier.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/loadFile.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/abstract.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/getSketchesFromDb.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/rectangle.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/core/dbConnection.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/translater.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/action/loadSketchFromServer.php</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/circle.js</file>
+            <file>file:/C:/open_server/OSPanel/domains/localhost/js/elements/ellipse.js</file>
+        </group>
+    </open-files>
+</project-private>

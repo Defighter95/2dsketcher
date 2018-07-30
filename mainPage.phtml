@@ -1,0 +1,933 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="js/jquery.svg.css">
+
+        <script src="js/jquery-3.3.1.js"></script>
+        <script src="js/jquery.svg.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+
+        <script src="js/translater.js"></script>
+
+        <script src="js/classes/sketch.js"></script>
+        <script src="js/classes/hardware.js"></script>
+
+        <script src="js/baseClasses.js"></script>
+
+        <script src="js/elements/abstract.js"></script>
+        <script src="js/elements/quadraticBizier.js"></script>
+        <script src="js/elements/cubicBizier.js"></script>
+        <script src="js/elements/polyLine.js"></script>
+        <script src="js/elements/circle.js"></script>
+        <script src="js/elements/rectangle.js"></script>
+        <script src="js/elements/ellipse.js"></script>
+
+        <script src="js/modalWindows.js"></script>
+
+
+        <style>
+            .svg-element {
+                cursor:move;
+            }
+            
+            [data-role="curve-point"] {
+                cursor:crosshair;
+            }
+
+            input[type="checkbox"] {
+                margin-left: 0px;
+                margin-top: 15px;
+            }
+
+            .margined-button {
+                margin-top: 10px;
+            }
+
+            .question-span {
+                color: red;
+                border: 1px solid #828282;
+                padding-top: 1px;
+                padding-left: 3px;
+                padding-right: 3px;
+                padding-bottom: 2px;
+                border-radius: 30px;
+                font-size: 7pt;
+            } 
+
+            .active-element-form-container {
+                display: block;
+                max-height: 800px;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-md-12" style="margin-bottom: 20px;">
+                    <ul class="nav nav-pills main-menu-buttons" style="    /* padding: 10px;  border: 3px solid; */border-color: #a0a0a0; border-radius: 5px 5px 0px 0px;">
+
+                        <li class="nav-item">
+                            <a class="btn btn-link" style="color: black;" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?= __("File") ?></a>
+                            <div class="dropdown-menu dropright">
+                                <a class="dropdown-item" href="#" data-action="get-from-bd"><span class="oi oi-book"></span> <?= __("Import from DB") ?></a>
+                                <a class="dropdown-item" href="#" data-action="load-file"><span class="oi oi-folder"></span> <?= __("Import from File") ?></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-action="db-export"><span class="oi oi-share-boxed"></span> <?= __("Export to DB") ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" style="color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?= __("Edit") ?></a>
+                            <div class="dropdown-menu dropright">
+
+                                <!--<a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <?= __("Action") ?></a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>-->
+
+                                <a class="dropdown-item" href="#" data-action="undo"><span class="oi oi-action-undo"></span> <?= __("Undo") ?></a>
+                                <a class="dropdown-item" href="#" data-action="redo"><span class="oi oi-action-redo"></span> <?= __("Redo") ?></a>
+                                <a class="dropdown-item" href="#" data-action="canva-params"><span class="oi oi-grid-two-up"></span> <?= __("Canvas' properties") ?></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-action="clear"><span class="oi oi-loop-circular"></span> <?= __("Clear") ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" style="color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= __("Mode") ?></a>
+                            <div class="dropdown-menu dropright">
+                                <a class="dropdown-item" href="#" data-action="hardware-sets"><span class="oi oi-terminal"></span> <?= __("Hardware properties") ?></a>
+                                <a class="dropdown-item" href="#" data-action="sketh-props"><span class="oi oi-map"></span> <?= __("Sketch properties") ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" style="color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= __("Action") ?></a>
+                            <div class="dropdown-menu dropright">
+                                <a class="dropdown-item" href="#" data-action="sketch-info"><span class="oi oi-info"></span> <?= __("Sketch total Info") ?></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-action="gen-codes"><span class="oi oi-fire"></span> <?= __("Generate G-codes") ?></a>
+                                <a class="dropdown-item" href="#" data-action="simulate"><span class="oi oi-play-circle"></span> <?= __("Simulate") ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-link" style="color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= __("Other") ?></a>
+                            <div class="dropdown-menu dropright">             
+                                <a class="dropdown-item" href="#" data-action="usefull-links"><span class="oi oi-external-link"></span> <?= __("Links") ?></a>
+                                <a class="dropdown-item" href="#" data-action="faq"><span class="oi oi-question-mark"></span> <?= __("FAQ") ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-link" style="color: black;" id="about-modal-button" href="#" data-action="about-window"><?= __("About") ?></a>
+                        </li>
+                    </ul>
+
+
+                </div>
+                <div class="col-md-3 active-element-form-container" style="">
+                    <form id="active-element-form">
+                        <!--  <div class="form-group row">
+                              <label for="inputEmail3" class="col-sm-3 col-form-label">Email <span style="color:red; cursor:pointer" class="oi oi-circle-x"></span></label>
+
+                              <div class="col">
+                                  <input type="text" class="form-control" placeholder="First name">
+                              </div>
+                              <div class="col">
+                                  <input type="text" class="form-control" placeholder="Last name">
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="inputPassword3" class="col-sm-2 col-form-label">Password </span></label>
+                              <div class="col-sm-10">
+                                  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                              </div>
+                          </div>
+                          <fieldset class="form-group">
+                              <div class="row">
+                                  <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                                  <div class="col-sm-10">
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                          <label class="form-check-label" for="gridRadios1">
+                                              First radio
+                                          </label>
+                                      </div>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                          <label class="form-check-label" for="gridRadios2">
+                                              Second radio
+                                          </label>
+                                      </div>
+                                      <div class="form-check disabled">
+                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+                                          <label class="form-check-label" for="gridRadios3">
+                                              Third disabled radio
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <div class="form-group row">
+                              <div class="col-sm-2">Checkbox</div>
+                              <div class="col-sm-10">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                      <label class="form-check-label" for="gridCheck1">
+                                          Example checkbox
+                                      </label>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-sm-10">
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-check"></span> Save</button>
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-chevron-left"></span> Restore</button>
+                                  <button type="submit" class="btn btn-secondary"><span class="oi oi-fork"></span> Copy</button>
+                              </div> 
+                          </div> -->
+                    </form>                
+                </div>
+                <!-- <div class="w-100"></div> -->
+                <div class="col-md-9" style="margin-top: 0px;">
+                    <div class="btn-toolbar float-left" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "pLine" title="<?= __("Polyline") ?>"><span class="oi oi-pulse"></span></button>
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "circle" title="<?= __("Circle") ?>"><span class="oi oi-media-record"></span></button>                      
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "ellipse" title="<?= __("Ellipse") ?>"><span class="oi oi-media-record"></span> <span class="oi oi-resize-both"></span></button>                   
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "rectangle" title="<?= __("Rectangle") ?>"><span class="oi oi-media-stop"></span></button>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "qBizier" title="<?= __("Quadratic Bizier") ?>"><span class="oi oi-crop"></span></button>
+                            <button type="button" class="btn btn-secondary component-menu-element" data-class = "cBizier" title="<?= __("Cubic Bizier") ?>"><span class="oi oi-link-broken"></span></button>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-secondary svg-control-button" data-action="undo" title="<?= __("Undo") ?>"><span class="oi oi-action-undo"></span></button>
+                            <button type="button" class="btn btn-secondary svg-control-button" data-action="redo" title="<?= __("Redo") ?>"><span class="oi oi-action-redo"></span></button>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="dropleft">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?= __("Objects") ?>">
+                                <span class="oi oi-spreadsheet"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                                <div id="element-list" style="padding-left: 20px; padding-right: 30px; padding-top: 5px; padding-bottom: 5px; border-radius: 0px 0px 5px 5px; border-color:#a0a0a0; max-height: 400px;     overflow-x: hidden;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="demo-div" style="clear:both; padding:10px; border: 3px solid; border-radius: 6px; border-color: #a0a0a0; border-radius: 0px 0px 5px 5px;">	
+                        <div class="btn-group mr-2" style="position: absolute;" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-light svg-control-button" title="<?= __("Zoom In") ?>" data-action="zoom-in"><span class="oi oi-zoom-in"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="<?= __("Zoom Out") ?>" data-action="zoom-out"><span class="oi oi-zoom-out"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="<?= __("To Zero Position") ?>" data-action="to-zero"><span class="oi oi-map-marker"></span></button>
+                            <button type="button" class="btn btn-light svg-control-button" title="<?= __("Canva's properties") ?>" data-action="params"><span class="oi oi-wrench"></span></button>                 
+                            <button type="button" class="btn btn-light svg-control-button simulate-start" title="<?= __("Start simulation") ?>" data-action="simulate-start"><span class="oi oi-media-play"></span></button>  
+                            <button type="button" class="btn btn-light svg-control-button simulate-stop" style="display: none" title="<?= __("Stop simulation") ?>" data-action="simulate-stop"><span class="oi oi-media-stop"></span></button>  
+                        </div>
+
+                        <svg onmousedown="return false"  id="svg" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <path class="active-element" id="demo-path" d="M10 80 Q 60 10, 95 80 T 280 80 T 180 180 T 215 300" stroke="black" fill="transparent"/> -->
+
+                        <!-- <polyline id="demo-poly" fill="none" stroke="black" stroke-dasharray="6, 3" points="10,80 60,10 95,80"/> -->
+                        </svg>
+                    </div>
+
+                </div>
+                <div class="col-md-9 offset-md-3" style="">
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+
+
+
+                <div class="col-md-2" style="">
+                    <!-- <div id="element-list" style="padding: 10px; border: 3px solid; border-radius: 0px 0px 5px 5px; border-color: #a0a0a0;">
+                          <div class="row element-list-item">
+                             <span class="col" data-id="1111" style="cursor:pointer">QuadraticBizier2143</span>
+                         </div>
+                         <div class="row">
+                             <span class="col" style="cursor:pointer">QuadraticBizier2172</span>
+                         </div>
+                         <div class="row">
+                             <span class="col font-weight-bold" style="cursor:pointer">QuadraticBizier2173</span>
+                         </div> 
+                     </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><?= __("Modal title") ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...		
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= __("Close") ?></button>
+                        <button type="button" class="btn btn-primary"><?= __("Save changes") ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="jqSvg" style="display:none"></div>
+
+        <!-- About Modal Content -->
+        <div id="about-modal-body" style="display:none">
+            <p>
+                <strong>
+                    2D Sketcher 2018 ver. 0.3<br />
+                    <?= __("Author: Ilya Kobus") ?><br />
+                </strong>
+            </p>		
+            <?= __("Used technologies and frameworks") ?>:<br />
+            <ul>
+                <li><a href="https://jquery.com/" target="_blank">JQuery 3.3.1</a></li>
+                <li><a href="http://keith-wood.name/svg.html" target="_blank">JQuery SVG plugin</a></li>
+                <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap v4.1.0</a></li>
+                <li><a href="https://useiconic.com/open/" target="_blank">Useiconic</a></li> 
+            </ul>		
+            <p class="text-right">
+                <span style="font-size: 0.9rem;">
+                    <strong><?= __("Contacts") ?>:</strong><br />
+                    <strong><?= __("Email") ?>: </strong><a href="mailto:illia.kobus@nure.ua">illia.kobus@nure.ua</a><br />
+                    <strong><?= __("Skype") ?>: </strong><a href="skype:defighter95">defighter95</a><br />
+                </span>
+            </p>
+            <p  class="text-right" style="font-size: 0.8rem;">
+                <?= __("You do not have the permission to use") ?><br /><?= __("or rewrite the source code without") ?><br /><?= __("the written consent of the author.") ?>
+            </p>
+        </div>
+        <!-- End of About Modal Content -->
+
+        <!-- Component Details Modal Content -->
+        <div id="detail-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <strong><?= __("Total Length") ?></strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-length">128.1</span> <?= __("mm") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Square of base for detail") ?></strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-square">22.1</span> <?= __("mm") ?><sup>2</sup>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Base commands count") ?></strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-commands-count">21</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Estimated lead time") ?></strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-time">60</span> <?= __("s") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Cost") ?></strong>
+                    </td>
+                    <td>
+                        <span id="detail-modal-body-form-cost">22.10</span> ₴                     
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- End of Component Details Modal Content -->
+
+        <!-- Canvas Params Modal -->
+        <div id="canvas-params-modal-body" style="display:none">	
+            <form id="canvas-params-form">
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-sm-6 col-form-label"><?= __("Grid cell Size (mm)") ?></label>
+                    <div class="col">
+                        <input type="number" min="5" max="500" id="canvas-params-cell-size" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div class="row">                   
+                    <label for="inputEmail3" class="col-sm-6 col-form-label"><?= __("SubGrid elements count") ?></label>
+                    <div class="col">
+                        <input type="number" min="1" max="10" id="canvas-params-subcell-count" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- End of Canvas Params Modal -->
+
+        <!-- Save to DB Modal -->
+        <div id="db-save-body" style="display:none">	
+            <?= __("Saving to DB...") ?><img height="50px" src="load.gif">
+        </div>
+        <!-- End of Save to DB Modal -->
+
+        <!-- Load from File Modal -->
+        <div id="load-file-body" style="display:none">	
+            <form id="load-file-form">
+                <div class="form-group">
+                    <label for="2ds-load"><?= __("Choose your 2D Sketch File (.2ds)") ?></label>
+                    <input type="file" accept=".2ds" class="form-control-file" id="2ds-load">
+                </div>
+                <span id="db-save-body-downloading" style="display:none"><?= __("Downloading...") ?><img height="50px" src="load.gif"></span>
+            </form>
+        </div>
+        <!-- End of Load from File Modal -->
+
+        <!-- Load from File Modal -->
+        <div id="generate-control-programm-body" style="display:none">	
+            <span id="generate-control-programm-creating"><?= __("Creating...") ?><img height="50px" src="load.gif"></span>
+        </div>
+        <!-- End of Load from File Modal -->
+
+        <!-- Sketch Properties Modal -->
+        <div id="sketch-properties-modal-body" style="display:none">	
+            <form id="sketch-properties-form">
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Interpolation step") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("A lower interpolation step increases the number of control commands, but the process of the curve curves is more accurate") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-3">
+                        <input type="range" min = "0.01" max ="0.5" step ="0.01" id="sketch-properties-form-inter" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <span id="sketch-properties-form-inter-value"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <svg height="30" onmousedown="return false" id="sketch-step-demo" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Material Type") ?></label>
+                    <div class="col-md-7">
+                        <select class="form-control" id="sketch-properties-material-type">
+                            <option value="1"><?= __("Glass") ?></option>
+                            <option value="2"><?= __("Wood") ?></option>
+                            <option value="3"><?= __("Plastic") ?></option>
+                            <option value="4"><?= __("Aluminium") ?></option>
+                            <option value="5"><?= __("Steel") ?></option>
+                            <option value="6"><?= __("Brass") ?></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Material depth (mm)") ?></label>
+                    <div class="col-md-7">
+                        <input type="number" min = "1" max ="100" step ="1" id="sketch-properties-material-deeps" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Allowance (mm)") ?></label>
+                    <div class="col-md-7">
+                        <input type="number" min = "1" max ="100" step ="1" id="sketch-properties-material-deeps" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Work coord system") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("The use of the working system allows the machine to work in a coordinate system that is different from the zero point") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="sketch-properties-use-work-system" class="form-control">                      
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="number" id="sketch-properties-work-system-x" class="form-control sketch-properties-work-system" placeholder="X" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" id="sketch-properties-work-system-y" class="form-control sketch-properties-work-system" placeholder="Y" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Use circular interpolation") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("The use of circular interpolation significantly reduces the number of instructions and improves the accuracy of machining the sections representing circles") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="sketch-properties-use-circ-inter" class="form-control">                      
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("mm to inches") ?></label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="sketch-properties-mm-to-inch" class="form-control">                      
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Compensation to devicе length") ?>
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("Adds to the control program the coordinate compensation command from the calculation of the dimensions of the specified tool") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="sketch-properties-compensation-dvice-length" class="form-control">                      
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Use Choosed stop") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("The use of a stop by choice allows you to enable the automatic stop of the program after processing each part") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="sketch-properties-use-choosed-stop" class="form-control">                      
+                    </div>
+                </div>                
+            </form>
+        </div>
+        <!-- End of Sketch Properties Modal -->
+
+        <!-- Links Modal -->
+        <div id="links-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <strong><?= __("SVG Documentation") ?></strong>
+                    </td>
+                    <td>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/SVG" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Фрезерные ЧПУ станки от MTech") ?></strong>
+                    </td>
+                    <td>
+                        <a href="https://mtech.com.ua/product-category/frezernye-stanki/ " target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Создание управляющих программ") ?></strong>
+                    </td>
+                    <td>                      
+                        <a href="https://vseochpu.ru/upravlyayushhaya-programma-dlya-stankov-s-chpu/" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Работа в САПР SolidWorks") ?></strong>
+                    </td>
+                    <td>
+                        <a href="https://www.youtube.com/watch?v=sYZL3vZpmRA" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Управляющий код - примеры управляющих программ") ?></strong>
+                    </td>
+                    <td>
+                        <a href=" http://www.intuwiz.ru/articles/examples-of-g-code.html#.WxHny-6FOUk" target="_blank"><span class="oi oi-external-link"></span></a>
+                    </td>
+                </tr>         
+            </table>
+        </div>
+        <!-- End of Links Modal -->
+
+        <!-- Load from BD Modal Content -->
+        <div id="load-from-bd-modal-body" style="display:none">		
+            <span id="load-from-bd-modal-body-loading"><?= __("Loading from DB...") ?><img id="loading" height="50px" src="load.gif"></span>
+            <table class="table table-bordered" style="display:none">
+                <thead>
+                <th>
+                    <?= __("Name") ?>
+                </th>
+                <th>
+                    <?= __("Created at") ?>
+                </th>
+                <th>
+                    <?= __("Choose") ?>
+                </th>
+                </thead>
+            </table>
+        </div>
+        <!-- End of Load from BD Modal Content -->
+
+        <!-- Hardware Settings Modal Content -->
+        <div id="hardware-settings-modal-body" style="display:none">	
+            <form id="hardware-settings-form">
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Device") ?> </label>
+                    <div class="col-md-5">
+                        <select class="form-control" id="hardware-settings-form-device">
+                            <option value="1">Twitte 10-4-Mini</option>
+                            <option value="2">STO CNC 6090</option>
+                            <option value="3">WATTSAN 0404 MINI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <img width="50px" id="device-pic" src="img/hardware_1_1.jpg">
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Use drill #") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("The tool with this number will be selected from the toolbox of the machine tool") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-7">
+                        <select class="form-control" id="hardware-settings-drill-no">
+                            <option value="1">01</option>
+                            <option value="2">02</option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                            <option value="5">05</option>
+                            <option value="1">06</option>
+                            <option value="2">07</option>
+                            <option value="3">08</option>
+                            <option value="4">09</option>
+                            <option value="5">10</option>
+                        </select>
+                    </div>
+                </div>               
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Drill diameter (mm)") ?></label>
+                    <div class="col-md-4">
+                        <input type="range" min = "1" max ="20" step ="1" id="hardware-settings-drill-size" class="form-control">
+                    </div>
+                    <div class="col-md-1">
+                        <label style="margin-left: -20px; margin-top: -4px;" for="inputEmail3" class="col-md-5 col-form-label" id="hardware-settings-drill-size-value"><?= __("Drill diameter (mm)") ?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <svg height="50" style="margin-top: -8px;" onmousedown="return false" id="drill-size" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Rotation") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("Specifies the direction of rotation of the tool") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-5">
+                        <select class="form-control" id="hardware-settings-drill-rotation">
+                            <option value="1"><?= __("clockwise") ?></option>
+                            <option value="2"><?= __("anti-clockwise") ?></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <img height="35px" src="anti-clockwise.jpg" id="hardware-settings-drill-rotation-img">
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Speed V(mm/min)") ?></label>
+                    <div class="col-md-7">
+                        <input type="number" min = "100" max ="2000" id="hardware-settings-speed" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">                   
+                    <label for="inputEmail3" class="col-md-5 col-form-label"><?= __("Coolant supply") ?> 
+                        <sup><span class="oi oi-question-mark question-span" title="<?= __("Includes the supply of lubricating-cooling fluid during product processing") ?>"></span></sup>
+                    </label>
+                    <div class="col-md-1">
+                        <input type="checkbox" id="hardware-settings-coolant-supply" class="form-control"> 
+                    </div>
+                </div>        
+            </form>
+        </div>
+        <!-- End of Hardware Settings Modal Content -->
+
+        <!-- Sketch Total Info Modal Content -->
+        <div id="sketch-info-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <strong><?= __("Total details Length") ?></strong>
+                    </td>
+                    <td>
+                        <span id="sketch-info-modal-body-form-length">128.1</span> <?= __("mm") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Square of base for details") ?></strong>
+                    </td>
+                    <td>
+                        <span id="sketch-info-modal-body-form-square">22.1</span> <?= __("mm") ?><sup>2</sup>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Base commands count") ?></strong>
+                    </td>
+                    <td>
+                        <span id="sketch-info-modal-body-form-commands-count">21</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Estimated lead time") ?></strong>
+                    </td>
+                    <td>
+                        <span id="sketch-info-modal-body-form-time">60</span> <?= __("s") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong><?= __("Cost") ?></strong>
+                    </td>
+                    <td>
+                        <span id="sketch-info-modal-body-form-cost">22.10</span> ₴                     
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- End of Sketch Total Info Modal Content -->
+
+        <!-- FAQ Modal Content -->
+        <div id="faq-modal-body" style="display:none">	
+            <table class="table table-bordered">
+                <thead>
+                <th>
+                    <strong><?= __("Question") ?></strong>
+                    </td>
+                <td>
+                    <strong><?= __("Answer") ?></strong>
+                </td>
+                </thead>
+                <tr>
+                    <td>
+                        <i><?= __("How to create a new drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("A new drawing is created immediately when the program window is opened. To save work on the current drawing and start a new one, you need to use the menu item <b>File</b> -> <span class='oi oi-share-boxed'></span> <b>Export to Database</b> and select <b>Edit</b> -> <span class='oi oi-loop-circular'></span> <b>Clear</b>, or simply refresh the page.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to add an object to the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To add a new object to the drawing, you must select the required one (for example, <span class='oi oi-pulse'></span>) in the object menu and click <b>LMC</b> above the drawing's working area.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to edit an object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To edit the selected object, you can use the data form of the object, or directly the working area of the drawing (<i>see details below</i>).") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to delete an object from the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To delete an object, select the required object and select <span class='oi oi-x'></span> <b>Delete</b> on the data form of the selected object, or by pressing <b>Shift</b> + <b>D</b>.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I move an object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To move the entire object, click <b>LMC</b> on the selected object in the drawing workspace and, without releasing it, move the object to the desired location.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I move a control point on an object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To move a control point, use the object data form by entering numeric values for the given points in the appropriate form fields, or by pressing the <b>LMB</b> drawing in the work area of the drawing, without moving, move the point to a new location.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to add / remove breakpoints?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("You can add a control point for an object by selecting the desired object in the working area of the drawing and clicking <b>Shift</b> + <b>LMC</b> in the area where you want to place the new point. You can remove control points using the data form of the object (<span class='oi oi-x form-delete-point' style='color:rgb(185,92,92);'></span> opposite the selected point), or Clicking <b>Shift</b> + <b>LMC</b> directly on the point in the drawing workspace.<br /><i><b>Important!</b> Not all objects support the addition of control points, and not all points of the object can be deleted.</i>") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I view additional information for an object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To view additional object data (length, area, manufacturing price, etc.), select <span class='oi oi-magnifying-glass'></span> <b>Details</b> on the data form.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I clone an object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To copy an object, use the <span class='oi oi-fork'> </span> <b>Copy</b> option on the data form for the active object.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I simulate the processing of the selected object?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To simulate the machining of the selected object, press <b>Shift</b> + <b>A</ b>") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to restore data on a form based on the object's data?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To cancel the data entered on the form, but not saved data, use the <span class='oi oi-chevron-left'></span> <b>Restore</b> option on the object data form.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I see a list of all the objects in the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To view a list of all the objects in the drawing, click <b>Objects</b> <span class='oi oi-spreadsheet'></span>, located in the right corner of the object pane.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to change the scale of a drawing grid?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("The scale of the drawing grid can be changed by clicking <b>Canvas Properties</b> <span class='oi oi-wrench'></span> in the drawing control panel (or in the main <b>Edit</b> -> <span class='oi oi-grid-two-up'></span> <b>Canvas Properties</b>) and entering a new value in <b>Grid Cell Size</b>.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to add subcells for more accurate positioning of objects?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To add sub-cells, open <b>Canvas Properties</b> <span class='oi oi-wrench'></span> and enter a new value in the <b>Number of Subcells</b> - each grid cell will be is divided into a given number of sub-cells.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I change the scale of the drawing display?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("The scale of the drawing display can be changed by clicking the <b>Zoom</b> <span class='oi oi-zoom-in'></span> and <b>Decrease</b> <span class='oi oi-zoom -out '></span> in the drawing control panel - the current grid size is always displayed in the lower right corner of the drawing work area.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to quickly jump to the origin of the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To go to the origin of the drawing, you must press <b>To position (0, 0)</b> <span class='oi oi-map-marker'></span> in the drawing control panel.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I find the current coordinates of the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("The current coordinates of the drawing are always displayed in the lower left corner of the work area.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to get the summary information on the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("The total information for the entire drawing, similar to individual objects (the length of the working path, the area of the entire part, etc.) can be obtained through the item <span class='oi oi-magnifying-glass'></span> <b>Detalis</b> of the drawing data form, or via the <b>Action</b> -> <span class='oi oi-info'></span> <b>General Drawing Info</b>") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I reset all drawing settings and clear it from all objects?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("You can quickly reset all settings and clear the drawing using the menu item <b>Edit</b> -> <span class='oi oi-loop-circular'></span> <b>Clear</b>.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to choose a ready-made drawing from the data in the database?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To select a drawing from the database, select the menu item <b>File</b> -> <span class='oi oi-book'></span> <b>Import from database</b> and select the required drawing from the list by clicking on the <span class='oi oi-data-transfer-download'></span> in front of it. The selected drawing will be immediately loaded with all the settings and ready for editing.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I download a drawing file from a medium to a PC?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To download a file from the computer, you need to select the menu item <b>File</b> -> <span class='oi oi-folder'></span> v <b>Import from file</b> using explorer and select the desired * .2ds file and press <b>OK</b> - the file will be loaded for editing.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to save the drawing and the work done?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To save the drawing, select the menu item <b> File </b> -> <span class='oi oi-share-boxed'></span> <b>Export to Database</b> - the drawing will be saved in DB of the server. In order to save the file with the drawing to disk, you need to click on the appeared <b>Upload</b>") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I undo the last actions?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To undo or restore the last actions, select the <b>Edit</b> -> <span class='oi oi-action-undo'></span> <b>Back</b> or <b>Editing</b> -> <span clas ='oi oi-action-redo'></span> <b>Next</b> (same as <b>Back</b> <span class='oi oi- action-undo '></span> or <b>Next</b> <span clas='oi oi-action-redo'></span> in the object pane). <i><b>Important!</b> The number of actions for cancellation is limited to a certain number.</i>") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I change the hardware settings of the final machine (model, operating modes, dimensions and type of cutter, etc.)?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To change the machine parameters, you must select the <b>Mode</b> -> <span class='oi oi-terminal'></span> <b>Hardware Settings</b> option and make any necessary changes to the data fields.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I change the drawing settings (interpolation step for curves, detail thickness, etc.)?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To change the drawing parameters, select the <b>Mode</b> -> <span class='oi oi-map'></span> <b>Drawing Settings</b> menu item and make the necessary changes in the data fields.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How to generate commands for the machine from the drawing?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To generate a set of commands for the machine, select the <b>Action</b> -> <span class='oi oi-fire'> </span> <b>Generate Control Program</b> menu item and save the created file on the carrier.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How do I perform a simulation of the drawing with the machine?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("To simulate the execution of the commands that will be generated for the machine according to the specified drawing, you must select the <b>Action</b> -> <span class='oi oi-play-circle'></span> <b>Simulation</b>. Following the cutting edge of the machine by the workpiece is displayed <span style='color: red'>in red</span> on the drawing work area.") ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i><?= __("How can I get other useful information?") ?></i>
+                    </td>
+                    <td>
+                        <?= __("For more information, you can use the links available in the <b>Other</b> -> <span class='oi oi-external-link'></span> <b>References</b> menu, and also find information on the Internet, or contact the author using contact information in the menu bar <b>About</b>.") ?>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- End of FAQ Modal Content -->
+
+    </body>
+</html>
